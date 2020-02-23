@@ -1,23 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   ft_max.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wvenita <wvenita@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/07 13:19:53 by wvenita           #+#    #+#             */
-/*   Updated: 2020/02/23 19:46:15 by wvenita          ###   ########.fr       */
+/*   Created: 2019/04/05 21:38:57 by wvenita           #+#    #+#             */
+/*   Updated: 2020/02/23 20:22:51 by wvenita          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strchr(const char *s, int c)
+int		ft_max(int a, int b)
 {
-	if (c == '\0')
-		return (NULL);
-	while (*s)
-		if (*s++ == c)
-			return ((char*)--s);
-	return (NULL);
+	return (a > b) ? a : b;
 }

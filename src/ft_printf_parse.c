@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf_parse.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wvenita <wvenita@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: wvenita <wvenita@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/04 23:21:02 by wvenita           #+#    #+#             */
-/*   Updated: 2020/02/06 15:42:56 by wvenita          ###   ########.fr       */
+/*   Updated: 2020/02/23 20:30:34 by wvenita          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static void field_dollar(t_printf *p)
+static void	field_dollar(t_printf *p)
 {
-	int parametr;
+	int		parametr;
 
 	parametr = check_dollar(p->format) ? ft_atoi(p->format) : 0;
 	if (!parametr)
-		return;
-	p->f |= (parametr > 0 ? F_DOLLAR : 0);
+		return ;
+	p->f |= (parametr > 0 ? F_DLR : 0);
 	va_copy(p->dap, p->map);
 	while (--parametr)
 		va_arg(p->dap, void *);
@@ -29,7 +29,7 @@ static void field_dollar(t_printf *p)
 		++p->format;
 }
 
-static void parse_flags(t_printf *p)
+static int	parse_flags(t_printf *p)
 {
 	while ((p->n = ft_strchri("# +-0*", *p->format, -1)) > -1 && ++p->format)
 		p->f |= (1 << p->n);
@@ -43,31 +43,32 @@ static void parse_flags(t_printf *p)
 			p->f |= F_MINUS;
 		}
 		if (!(p->f & F_APR))
-			p->min_width = p->n;
+			p->min_w = p->n;
 		else
-			p->precision = p->n;
+			p->prec = p->n;
 	}
+	return (1);
 }
 
-static void field_width_precision(t_printf *p)
+static void	field_width_prec(t_printf *p)
 {
 	if (48 < *p->format && *p->format < 58)
 	{
-		p->min_width = MAX(1, ft_atoi(p->format));
+		p->min_w = ft_max(1, ft_atoi(p->format));
 		while (47 < *p->format && *p->format < 58)
 			++p->format;
 	}
 	if (*p->format == '.')
 	{
 		++p->format;
-		p->precision = MAX(ft_atoi(p->format), 0);
+		p->prec = ft_max(ft_atoi(p->format), 0);
 		while (47 < *p->format && *p->format < 58)
 			++p->format;
 		p->f |= F_APR;
 	}
 }
 
-static void conversion_specifier(t_printf *p)
+static void	conversion_specifier(t_printf *p)
 {
 	p->c = *p->format;
 	if (p->c == 's')
@@ -90,15 +91,15 @@ static void conversion_specifier(t_printf *p)
 		cs_not_found(p);
 }
 
-void parse_optionals(t_printf *p)
+void		parse_optionals(t_printf *p)
 {
 	p->f = 0;
-	p->min_width = 0;
-	p->precision = 0;
+	p->min_w = 0;
+	p->prec = 0;
 	field_dollar(p);
 	parse_flags(p);
-	field_width_precision(p);
-	while (42)
+	field_width_prec(p);
+	while (21)
 	{
 		if (*p->format == 'l')
 			p->f |= (p->format[1] == 'l' && ++p->format) ? F_LONG2 : F_LONG;
@@ -111,11 +112,10 @@ void parse_optionals(t_printf *p)
 		else if (*p->format == 'L')
 			p->f |= F_LONGD;
 		else
-			break;
+			break ;
 		++p->format;
 	}
-	parse_flags(p);
-	if (ft_strchr("CDSUOBXF", *p->format))
-		p->f |= (ft_strchr("XF", *p->format)) ? F_UPCASE: F_LONG;
+	if (parse_flags(p) && ft_strchr("CDSUOBXF", *p->format))
+		p->f |= (ft_strchr("XF", *p->format)) ? F_UPCASE : F_LONG;
 	conversion_specifier(p);
 }

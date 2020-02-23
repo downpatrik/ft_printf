@@ -3,25 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wvenita <wvenita@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: wvenita <wvenita@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/03 22:28:00 by wvenita           #+#    #+#             */
-/*   Updated: 2020/02/06 15:43:45 by wvenita          ###   ########.fr       */
+/*   Updated: 2020/02/23 20:18:24 by wvenita          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
-#define LIBFT_H
+# define LIBFT_H
 
 # include <stdlib.h>
 # include <unistd.h>
-
-# ifndef MIN
-#  define MIN(a, b) (((a)<(b))?(a):(b))
-# endif
-# ifndef MAX
-#  define MAX(a, b) (((a)>(b))?(a):(b))
-# endif
 
 typedef unsigned char	t_u8;
 typedef unsigned short	t_u16;
@@ -60,8 +53,11 @@ void					ft_putstr_fd(char const *s, int fd);
 void					ft_putendl_fd(char const *s, int fd);
 void					ft_putnbr_fd(int n, int fd);
 
-double				ft_dpow(double nb, int power);
+double					ft_dpow(double nb, int power);
 int						ft_abs(int c);
+long double				ft_dabs(long double n);
+int						ft_min(int a, int b);
+int						ft_max(int a, int b);
 
 void					ft_bzero(void *s, size_t n);
 
@@ -87,7 +83,8 @@ char					*ft_strncpy(char *dest, const char *src, size_t n);
 char					*ft_strcat(char *dest, const char *src);
 char					*ft_strncat(char *dest, const char *src, size_t nb);
 size_t					ft_strlcat(char *dest, const char *src, size_t size);
-char					*ft_strnstr(const char *str, const char *to_find, size_t nb);
+char					*ft_strnstr(const char *str,
+										const char *to_find, size_t nb);
 char					*ft_strstr(const char *str, const char *to_find);
 char					*ft_strchr(const char *s, int c);
 char					*ft_strrchr(const char *s, int c);
@@ -119,8 +116,8 @@ void					ft_lstadd(t_list **alst, t_list *new);
 void					ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 t_list					*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
 
-size_t 				ft_wcharlen(unsigned c);
-size_t 				ft_wstrlen(unsigned *s);
+size_t					ft_wcharlen(unsigned c);
+size_t					ft_wstrlen(unsigned *s);
 int						ft_strchri(char *s, int c, int i);
 int						ft_strchri_lu(char *s, int c, int i);
 

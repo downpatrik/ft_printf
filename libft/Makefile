@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: wvenita <wvenita@student.21-school.ru>     +#+  +:+       +#+         #
+#    By: wvenita <wvenita@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/03 22:27:50 by wvenita           #+#    #+#              #
-#    Updated: 2020/02/06 15:51:03 by wvenita          ###   ########.fr        #
+#    Updated: 2020/02/23 20:16:48 by wvenita          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,8 +32,12 @@ SRC = ft_atoi.c \
 	  ft_strncmp.c \
 	  ft_wcharlen.c \
 	  ft_wstrlen.c \
-		ft_isdigit.c \
-		ft_isspace.c
+	  ft_isdigit.c \
+	  ft_isspace.c \
+	  ft_abs.c \
+	  ft_dabs.c \
+	  ft_max.c \
+	  ft_min.c
 
 all: $(NAME)
 

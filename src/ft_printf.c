@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Sysadmin <Sysadmin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wvenita <wvenita@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/04 23:20:00 by Sysadmin          #+#    #+#             */
-/*   Updated: 2020/02/05 20:52:41 by Sysadmin         ###   ########.fr       */
+/*   Created: 2020/01/04 23:20:00 by wvenita           #+#    #+#             */
+/*   Updated: 2020/02/23 20:30:34 by wvenita          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int ft_printf(const char *format, ...)
+int		ft_printf(const char *format, ...)
 {
-	t_printf p;
+	t_printf	p;
 
 	ft_bzero(&p, sizeof(p));
 	p.fd = 1;
@@ -23,11 +23,10 @@ int ft_printf(const char *format, ...)
 	va_copy(p.ap, p.map);
 	while (*p.format)
 	{
-		if (*p.format == '%')
+		if (*p.format == '%' && p.format++)
 		{
-			++p.format;
 			if (!*p.format)
-				break;
+				break ;
 			parse_optionals(&p);
 		}
 		else if (*p.format == '{')
@@ -39,11 +38,10 @@ int ft_printf(const char *format, ...)
 	write(p.fd, p.buff, p.buffer_index);
 	va_end(p.map);
 	va_end(p.ap);
-	va_end(p.dap);
 	return (p.len);
 }
 
-int ft_dprintf(int fd, const char *format, ...)
+int		ft_dprintf(int fd, const char *format, ...)
 {
 	t_printf p;
 
@@ -54,11 +52,10 @@ int ft_dprintf(int fd, const char *format, ...)
 	va_copy(p.ap, p.map);
 	while (*p.format)
 	{
-		if (*p.format == '%')
+		if (*p.format == '%' && p.format++)
 		{
-			++p.format;
 			if (!*p.format)
-				break;
+				break ;
 			parse_optionals(&p);
 		}
 		else if (*p.format == '{')
@@ -70,14 +67,13 @@ int ft_dprintf(int fd, const char *format, ...)
 	write(p.fd, p.buff, p.buffer_index);
 	va_end(p.map);
 	va_end(p.ap);
-	va_end(p.dap);
 	return (p.len);
 }
 
-void buffer(t_printf *p, void *new, size_t size)
+void	buffer(t_printf *p, void *new, size_t size)
 {
-	int diff;
-	long long new_i;
+	int			diff;
+	long long	new_i;
 
 	new_i = 0;
 	while ((PF_BUF_SIZE - p->buffer_index) < (int)size)
@@ -96,14 +92,14 @@ void buffer(t_printf *p, void *new, size_t size)
 	p->len += size;
 }
 
-void padding(t_printf *p, int n)
+void	padding(t_printf *p, int n)
 {
 	if (!p->padding)
-		return;
+		return ;
 	p->c = (p->f & F_ZERO) ? '0' : ' ';
-	if(!(p->f & F_APR) && (p->f & F_ZERO) && n == 0)
+	if (!(p->f & F_APR) && (p->f & F_ZERO) && n == 0)
 		p->c = '0';
-	else if ((p->precision < p->min_width) && (p->f & F_ZERO))
+	else if ((p->prec < p->min_w) && (p->f & F_ZERO))
 		p->c = ' ';
 	if ((!n && !(p->f & F_MINUS)) || (n && (p->f & F_MINUS)))
 		while (p->padding--)

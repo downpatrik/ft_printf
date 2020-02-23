@@ -25,9 +25,9 @@ int main(void)
 	printf("{%f}{%lf}{%Lf}\n", 1.42, 1.42, 1.42l);
 	ft_printf("{%f}{%lf}{%Lf}\n", 1.42, 1.42, 1.42l);
 
-	ft_printf("% h");
-	printf("1% h");
-	printf("~\n\n");
+	// ft_printf("% h");
+	// printf("1% h");
+	// printf("~\n\n");
 
 	printf("_%+0-*.6d_\n", 8, 100);
 	ft_printf("_%+0-*.6D_\n\n", 8, 100);

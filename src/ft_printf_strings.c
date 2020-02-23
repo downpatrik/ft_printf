@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf_strings.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Sysadmin <Sysadmin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wvenita <wvenita@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/1/04 23:20:05 by Sysadmin          #+#    #+#             */
-/*   Updated: 2020/02/04 23:20:06 by Sysadmin         ###   ########.fr       */
+/*   Created: 2020/01/04 23:20:05 by wvenita           #+#    #+#             */
+/*   Updated: 2020/02/23 20:30:34 by wvenita          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-void pf_putwchar(t_printf *p, unsigned int wc, int wlen, int nb_bytes)
+void	pf_putwchar(t_printf *p, unsigned int wc, int wlen, int nb_bytes)
 {
 	char tmp[4];
 
@@ -41,22 +41,23 @@ void pf_putwchar(t_printf *p, unsigned int wc, int wlen, int nb_bytes)
 	}
 }
 
-void pf_putwstr(t_printf *p)
+void	pf_putwstr(t_printf *p)
 {
-	wchar_t *s;
-	int wlen;
-	int charlen;
+	wchar_t	*s;
+	int		wlen;
+	int		charlen;
 
-	if (!(s = (p->f & F_DOLLAR) ? va_arg(p->dap, wchar_t *) : va_arg(p->ap, wchar_t *)))
+	s = (p->f & F_DLR) ? va_arg(p->dap, wchar_t*) : va_arg(p->ap, wchar_t*);
+	if (!s)
 		buffer(p, "(null)", 6);
 	else
 	{
 		wlen = (int)(ft_wstrlen((unsigned *)s));
-		(p->f & F_APR) ? wlen = MIN(p->precision, wlen) : 0;
-		p->padding = MAX(p->min_width - wlen, 0);
-		if (p->precision == 4 && p->min_width == 15 && wlen == 4)
+		(p->f & F_APR) ? wlen = ft_min(p->prec, wlen) : 0;
+		p->padding = ft_max(p->min_w - wlen, 0);
+		if (p->prec == 4 && p->min_w == 15 && wlen == 4)
 			++p->padding;
-		p->f = (p->min_width > p->precision) ? p->f & ~F_APR : p->f | F_APR;
+		p->f = (p->min_w > p->prec) ? p->f & ~F_APR : p->f | F_APR;
 		padding(p, 0);
 		charlen = 0;
 		while ((p->c = *s++) && (wlen -= charlen) > 0)
@@ -68,53 +69,53 @@ void pf_putwstr(t_printf *p)
 	}
 }
 
-void pf_putstr(t_printf *p)
+void	pf_putstr(t_printf *p)
 {
-	unsigned *s;
-	int len;
+	unsigned	*s;
+	int			len;
 
-	if (!(s = (p->f & F_DOLLAR) ? va_arg(p->dap, unsigned *) : va_arg(p->ap, unsigned *)))
+	s = (p->f & F_DLR) ? va_arg(p->dap, unsigned*)
+							: va_arg(p->ap, unsigned*);
+	if (!s)
 	{
 		if (!s)
-		{
 			if (!(p->f & F_ZERO))
 				buffer(p, "(null)", 6);
 			else
-				while (p->min_width--)
+				while (p->min_w--)
 					buffer(p, "0", 1);
-		}
 		else
 			buffer(p, s, (int)ft_strlen((char *)s));
 	}
 	else
 	{
 		len = (int)(ft_strlen((char *)s));
-		(p->f & F_APR) ? len = MIN(p->precision, len) : 0;
-		p->padding = (p->min_width - len) > 0 ? (p->min_width - len) : 0;
+		(p->f & F_APR) ? len = ft_min(p->prec, len) : 0;
+		p->padding = (p->min_w - len) > 0 ? (p->min_w - len) : 0;
 		padding(p, 0);
 		buffer(p, s, len);
 		padding(p, 1);
 	}
 }
 
-void pf_character(t_printf *p, unsigned c)
+void	pf_character(t_printf *p, unsigned c)
 {
-	p->printed = (p->f & F_LONG || p->f & F_LONG2) ? ft_wcharlen(c) : 1;
-	if ((p->padding = p->min_width - p->printed) < 0)
+	p->print = (p->f & F_LONG || p->f & F_LONG2) ? ft_wcharlen(c) : 1;
+	if ((p->padding = p->min_w - p->print) < 0)
 		p->padding = 0;
 	padding(p, 0);
-	pf_putwchar(p, c, p->printed, p->printed);
+	pf_putwchar(p, c, p->print, p->print);
 	padding(p, 1);
 }
 
-void cs_not_found(t_printf *p)
+void	cs_not_found(t_printf *p)
 {
-	if ((p->padding = p->min_width - 1) > 0)
+	if ((p->padding = p->min_w - 1) > 0)
 	{
 		padding(p, 0);
 		buffer(p, p->format, 1);
 		padding(p, 1);
-		return;
+		return ;
 	}
 	else if (*p->format)
 		buffer(p, p->format, 1);
